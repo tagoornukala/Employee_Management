@@ -1,7 +1,11 @@
+<!-- templates/edit_employee.html -->
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Edit Employee</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         form {
             max-width: 600px;
@@ -55,60 +59,71 @@
         .form-section div {
             margin-bottom: 0.5em;
         }
+        h1 {
+            text-align: center;
+        }
+        #button{
+            display: flex;
+            width:100%;
+            justify-content: center;
+            padding: 8px;
+        }
+        button > a{
+            text-decoration: none;
+            color: #000;
+        }
+        button {
+            margin:2px;
+        } 
     </style>
 </head>
 <body>
+    {% block content %}
     <h1>Edit Employee</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form id="employee-form" method="post" action="{% url 'edit_employee' employee.id %}">
         {% csrf_token %}
-        <div class="form-section">
-            {{ form.as_p }}
-        </div>
-
-        <div class="form-section">
-            <h2>Address Details</h2>
-            {{ address_formset.as_p }}
-            {% comment %} {{ address_formset.management_form }}
-            {% for form in address_formset %}
-                <div>
-                    {{ form.as_p }}
-                </div>
-            {% endfor %} {% endcomment %}
-        </div>
-
-        <div class="form-section">
-            <h2>Work Experience</h2>
-            {{ work_experience_formset.management_form }}
-            {% for form in work_experience_formset %}
-                <div>
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="form-section">
-            <h2>Qualifications</h2>
-            {{ qualification_formset.management_form }}
-            {% for form in qualification_formset %}
-                <div>
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="form-section">
-            <h2>Projects</h2>
-            {{ project_formset.management_form }}
-            {% for form in project_formset %}
-                <div>
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div>
-            <input type="submit" value="Save">
+        {{ form.as_p }}
+        {{ address_formset.management_form }}
+        {{ work_experience_formset.management_form }}
+        {{ qualification_formset.management_form }}
+        {{ project_formset.management_form }}
+        <div id="address-formset">{{ address_formset.as_p }}</div>
+        <div id="work-experience-formset">{{ work_experience_formset.as_p }}</div>
+        <div id="qualification-formset">{{ qualification_formset.as_p }}</div>
+        <div id="project-formset">{{ project_formset.as_p }}</div>
+        <div id='button'>
+            <button type="submit">Update</button>
+            <button type="submit"><a 
+                href="{% url 'employee_list' %}">Employee List</a></button>
         </div>
     </form>
+    <script>
+        $('#employee-form').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(data) {
+                    if (data.success) {
+                        alert('Employee updated successfully!');
+                        // Optionally, redirect or reset the form
+                        window.location.href = data.redirect_url;
+                    } else {
+                        // Handle errors
+                        var errors = data.errors;
+                        alert('Failed to update employee. Check the console for errors.');
+                        console.log(errors);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to update employee.');
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+    {% endblock %}
 </body>
 </html>

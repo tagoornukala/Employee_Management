@@ -35,3 +35,7 @@ WorkExperienceFormSet = inlineformset_factory(Employee, WorkExperience, form=Wor
 QualificationFormSet = inlineformset_factory(Employee, Qualification, form=QualificationsForm, extra=1, can_delete=True)
 ProjectFormSet = inlineformset_factory(Employee, Project, form=ProjectForm, extra=1, can_delete=True)
 
+edit_AddressDetailsFormSet = inlineformset_factory(Employee, AddressDetails, form=AddressDetailsForm, extra=0, can_delete=True)
+edit_WorkExperienceFormSet = inlineformset_factory(Employee, WorkExperience, form=WorkExperienceForm, extra=0, can_delete=True)
+edit_QualificationFormSet = inlineformset_factory(Employee, Qualification, form=QualificationsForm, extra=0, can_delete=True)
+edit_ProjectFormSet = inlineformset_factory(Employee, Project, form=ProjectForm, extra=0, can_delete=True)
