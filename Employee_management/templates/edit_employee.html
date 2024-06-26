@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Employee</title>
+    <style>
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 1em;
+            border: 1px solid #ccc;
+            border-radius: 1em;
+        }
+
+        div + div {
+            margin-top: 1em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: #333333;
+        }
+
+        input, textarea, select {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #999;
+        }
+
+        input[type="submit"] {
+            padding: 1em;
+            border: 1px solid #007BFF;
+            border-radius: 1em;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .form-section {
+            margin-bottom: 2em;
+        }
+
+        .form-section h2 {
+            margin-bottom: 0.5em;
+            color: #007BFF;
+        }
+
+        .form-section div {
+            margin-bottom: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Employee</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-section">
+            {{ form.as_p }}
+        </div>
+
+        <div class="form-section">
+            <h2>Address Details</h2>
+            {{ address_formset.as_p }}
+            {% comment %} {{ address_formset.management_form }}
+            {% for form in address_formset %}
+                <div>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %} {% endcomment %}
+        </div>
+
+        <div class="form-section">
+            <h2>Work Experience</h2>
+            {{ work_experience_formset.management_form }}
+            {% for form in work_experience_formset %}
+                <div>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-section">
+            <h2>Qualifications</h2>
+            {{ qualification_formset.management_form }}
+            {% for form in qualification_formset %}
+                <div>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-section">
+            <h2>Projects</h2>
+            {{ project_formset.management_form }}
+            {% for form in project_formset %}
+                <div>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <input type="submit" value="Save">
+        </div>
+    </form>
+</body>
+</html>
