@@ -93,34 +93,39 @@
         <div id="project-formset">{{ project_formset.as_p }}</div>
         <div id='button'>
             <button type="submit">Update</button>
-            <button type="submit"><a 
-                href="{% url 'employee_list' %}">Employee List</a></button>
+            <button type='button' id='redirectToEmployeeList'>Employee List</button>
         </div>
-    </form>
     <script>
-        $('#employee-form').submit(function(event) {
-            event.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: form.serialize(),
-                success: function(data) {
-                    if (data.success) {
-                        alert('Employee updated successfully!');
-                        // Optionally, redirect or reset the form
-                        window.location.href = data.redirect_url;
-                    } else {
-                        // Handle errors
-                        var errors = data.errors;
-                        alert('Failed to update employee. Check the console for errors.');
-                        console.log(errors);
+        $(document).ready(function() {
+            $('#employee-form').submit(function(event) {
+                event.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            alert('Employee updated successfully!');
+                            window.location.href = data.redirect_url;
+                        } else {
+                            var errors = data.errors;
+                            alert('Failed to update employee. Check the console for errors.');
+                            console.log(errors);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Failed to update employee.');
+                        console.log(error);
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert('Failed to update employee.');
-                    console.log(error);
-                }
+                });
+            });
+
+            $('#redirectToEmployeeList').click(function() {
+                window.location.href = '{% url "employee_list" %}';
             });
         });
     </script>

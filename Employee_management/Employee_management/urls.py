@@ -22,5 +22,4 @@ urlpatterns = [
     path('edit_employee/<int:employee_id>/',views.edit_employee,name='edit_employee'),
     path('delete_employee/<int:employee_id>/',views.delete_employee, name='delete_employee'),
     path('',views.employee_list, name='employee_list'),
-    path('ajax/employees/',views.ajax_employee_list, name='ajax_employee_list'),
 ]

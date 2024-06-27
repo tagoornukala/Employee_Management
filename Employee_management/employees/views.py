@@ -101,14 +101,9 @@ def delete_employee(request,employee_id):
     if request.method == 'POST':
         employee = get_object_or_404(Employee,pk=employee_id)
         employee.delete()
-        return JsonResponse({'success':True, 'redirect_url': reverse('employee_list')})
+        return JsonResponse({'success':True})
     return JsonResponse({'success':False, 'error':'Invalid request method'}, status=405)
 
 def employee_list(request):
     employees = Employee.objects.all()
     return render(request, 'employees.html', {'employee':employees})
-
-def ajax_employee_list(request):
-    employees = Employee.objects.all()
-    html = render_to_string('partial/employee_list.html', {'employees': employees}, request=request)
-    return JsonResponse({'html':html})
